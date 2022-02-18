@@ -89,7 +89,7 @@ Resources:
 func TestMessageVerifySigSimple(t *testing.T) {
 	inputJson := `{
 	"address" : "0x6Da01670d8fc844e736095918bbE11fE8D564163",
-	"chainId" : "1",
+	"chainId" : 1,
 	"domain" : "localhost:4361",
 	"issuedAt" : "2021-12-07T18:28:18.807Z",
 	"nonce" : "kEWepMt9knR6lWJ6A",

@@ -22,12 +22,12 @@ type Message struct {
 	Statement      *string    `json:"statement,omitempty"`
 	URI            string     `json:"uri"`
 	Version        version    `json:"version"`
-	ChainID        int64      `json:"chainId,string"`
+	ChainID        int64      `json:"chainId"`
 	Nonce          string     `json:"nonce"`
 	IssuedAt       time.Time  `json:"issuedAt"`
 	ExpirationTime *time.Time `json:"expirationTime,omitempty"`
 	NotBefore      *time.Time `json:"notBefore,omitempty"`
-	RequestID      *string    `json:"requestID,omitempty"`
+	RequestID      *string    `json:"requestId,omitempty"`
 	Resources      []string   `json:"resources,omitempty"`
 }
 

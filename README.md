@@ -20,6 +20,22 @@ Parsing is done via the `MessageFromString` function:
 msg, err := MessageFromString(text_representation)
 ```
 
+### Parsing from JSON
+
+`Message` object can be parsed from JSON format defined by [official siwe package](https://github.com/spruceid/siwe).
+
+```go
+type RequestBody struct {
+    Message   siwe.Message `json:"message"`
+    Signature string       `json:"signature"`
+}
+
+var r *http.Request  // incoming request
+
+var body RequestBody
+err := json.NewDecoder(r.Body).Decode(&body)
+```
+
 ### Verifying and Authenticating a SIWE Message
 
 Verification and Authentication is performed via EIP-191. `VerifySignature` function of `Message` will recover
