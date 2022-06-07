@@ -2,7 +2,6 @@ package siwe
 
 import (
 	"bufio"
-	"encoding/hex"
 	"errors"
 	"io"
 	"strconv"
@@ -118,18 +117,12 @@ func (p *parser) ruleAddress() bool {
 		return false
 	}
 
-	if !strings.HasPrefix(l, "0x") || len(l) != 42 {
-		p.err = errors.New("invalid address line")
-		return false
-	}
-
-	b, err := hex.DecodeString(l[2:])
+	err := p.msg.Address.ParseString(l)
 	if err != nil {
 		p.err = err
 		return false
 	}
 
-	copy(p.msg.Address[:], b)
 	return true
 }
 

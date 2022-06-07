@@ -24,7 +24,7 @@ Issued At: 2022-02-15T12:34:56.789Z`
 	assert.Nil(t, err)
 
 	assert.Equal(t, "test.com", msg.Domain)
-	assert.Equal(t, "deadbeef00000000000000000000000000000000", hex.EncodeToString(msg.Address[:]))
+	assert.Equal(t, "deadbeef00000000000000000000000000000000", hex.EncodeToString(msg.Address.Bytes()))
 	assert.Nil(t, msg.Statement)
 	assert.Equal(t, "https://example.com/uri", msg.URI)
 	assert.Equal(t, V1, msg.Version)
@@ -61,7 +61,7 @@ Resources:
 	assert.Nil(t, err)
 
 	assert.Equal(t, "test.com", msg.Domain)
-	assert.Equal(t, "deadbeef00000000000000000000000000000000", hex.EncodeToString(msg.Address[:]))
+	assert.Equal(t, "deadbeef00000000000000000000000000000000", hex.EncodeToString(msg.Address.Bytes()))
 	if assert.NotNil(t, msg.Statement) {
 		assert.Equal(t, "Statement 123", *msg.Statement)
 	}
@@ -147,4 +147,29 @@ Resources:
 
 	assert.True(t, msg.ValidAt(time.Date(2021, 12, 20, 4, 44, 25, 0, time.FixedZone("UTC-8", -8*3600))))
 	assert.False(t, msg.ValidAt(time.Date(2021, 12, 20, 4, 44, 26, 0, time.FixedZone("UTC-8", -8*3600))))
+}
+
+func TestMessageVerifyNoChecksumAddress(t *testing.T) {
+	text := `localhost:3000 wants you to sign in with your Ethereum account:
+0x85997cf3567563fa62e7a00ba3575a440b5a3b57
+
+Sign in with Ethereum to the Vibe Canvas app.
+
+URI: http://localhost:3000
+Version: 1
+Chain ID: 1
+Nonce: okPqjspj7qmHZ7t4s
+Issued At: 2022-06-06T23:42:06.323Z
+Expiration Time: 2022-06-06T23:47:06.323Z`
+
+	signature := "81314029c13e009c01760f8cfa769d60b720b778500824eda312c4a05999e642183e314aa5578602e869e3f31c9a13c01be583752294ea572c106002498cf6991b"
+
+	msg, err := MessageFromString(text)
+	assert.Nil(t, err)
+
+	sig, err := hex.DecodeString(signature)
+	assert.Nil(t, err)
+
+	err = msg.VerifySignature(sig)
+	assert.Nil(t, err)
 }

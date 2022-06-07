@@ -94,7 +94,7 @@ func (m *Message) VerifySignature(sig []byte) error {
 	hPk := sha3.NewLegacyKeccak256()
 	hPk.Write(pkBytes[1:])
 
-	if !bytes.Equal(m.Address[:], hPk.Sum(nil)[12:]) {
+	if !bytes.Equal(m.Address.Bytes(), hPk.Sum(nil)[12:]) {
 		return errors.New("signature validation failed")
 	}
 
@@ -134,7 +134,11 @@ func (m *Message) String() string {
 	sb.WriteString(DomainMessage)
 	sb.WriteByte('\n')
 
-	sb.WriteString(m.Address.String())
+	addr := m.Address.RawString()
+	if addr == "" {
+		addr = m.Address.String()
+	}
+	sb.WriteString(addr)
 	sb.WriteByte('\n')
 
 	sb.WriteByte('\n')
